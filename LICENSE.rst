@@ -32,7 +32,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 Copyright (c) 2020, Battelle Memorial Institute
 
-Copyright 2007 - present: numerous others credited in AUTHORS.rst
+Copyright 2007 - present: numerous others credited in `<AUTHORS.rst>`_
 
 Version 5.0, June 2020
 
