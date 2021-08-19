@@ -2,6 +2,8 @@
 Agent-Based Modeling of Electricity Systems (AMES) - Market
 ===========================================================
 
+Copyright (c) 2021, BSD 3-Clause License
+
 Copyright (c) 2020, Battelle Memorial Institute
 
 Copyright 2007 - present: numerous others credited in `<AUTHORS.rst>`_
