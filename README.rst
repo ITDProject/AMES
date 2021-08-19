@@ -24,7 +24,7 @@ See documentation_ and publications_ for more information.
 Acknowledgement
 ---------------
 
-AMES was originated in 2006 at Iowa State University (ISU) by Prof.  Leigh 
+AMES was originated in 2006 at Iowa State University (ISU) by Professor  Leigh 
 Tesfatsion and her students.  It evolved through several versions with 
 funding from the National Science Foundation, the ISU Electric Power 
 Research Center, the U.  S.  Department of Energy (DOE) Office of 
