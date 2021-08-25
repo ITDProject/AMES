@@ -3,7 +3,7 @@
 Installation
 ============
 
-AMES V5.0 is only supported on Windows Platform. 
+AMES V5.X is only supported on Windows Platform. 
 
 1. 	Install Java from https://www.oracle.com/technetwork/java/javase/downloads/index.html
 
