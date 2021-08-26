@@ -9,7 +9,7 @@ AMES V5.1 is only supported on Windows Platform.
 
    	After Java is installed, add 'LocationToJavaDirectory/bin' ( e.g. C:\Java\jdk-13.0.2\bin) to the PATH system variable.
    
-  	As AMES V5.0 is integrated with FNCS, running AMES V5.0 requires FNCS dependencies. 
+  	As AMES V5.1 is integrated with FNCS, running AMES V5.1 requires FNCS dependencies. 
    
    	The FNCS dependencies uploaded as part of this repository need to be downloaded, and their location needs to be added to the PATH system variable. 
 
@@ -18,7 +18,7 @@ AMES V5.1 is only supported on Windows Platform.
    	Verify Java installation using "Java -version" command prompt.  
    
 
-2.	The ANT tool used to compile AMES V5.0. ANT must be downloaded and extracted to a local directory.
+2.	The ANT tool used to compile AMES V5.1. ANT must be downloaded and extracted to a local directory.
 
     	Download Apache Ant from: https://ant.apache.org/
 	
@@ -37,7 +37,7 @@ AMES V5.1 is only supported on Windows Platform.
 	
 4.	Python
 
-    	AMES V5.0 uses modified Power System Simulation Toolbox (PSST), based on Python (V3). Thus, Python must first be locally installed. 
+    	AMES V5.1 uses modified Power System Simulation Toolbox (PSST), based on Python (V3). Thus, Python must first be locally installed. 
     
     	Python can be installed using any of the following choices:
     
@@ -70,7 +70,7 @@ AMES V5.1 is only supported on Windows Platform.
 
 5. 	Install psst.
 
-    	After Python has been locally installed, PSST must be locally installed. PSST has been uploaded as part of AMES V5.0.  Therefore, PSST will automatically download as part of the AMES V5.0 download.
+    	After Python has been locally installed, PSST must be locally installed. PSST has been uploaded as part of AMES V5.1.  Therefore, PSST will automatically download as part of the AMES V5.1 download.
     
     	After PSST has been downloaded to a local folder, it can be installed from the command line for this local folder in two steps, as follows:  
   	
@@ -87,5 +87,5 @@ AMES V5.1 is only supported on Windows Platform.
    
 6. 	Solver
 
-    	AMES V5.0 uses the CPLEX optimization solver, available at: https://www.ibm.com/support/pages/downloading-ibm-ilog-cplex-optimization-studio-v1290
+    	AMES V5.1 uses the CPLEX optimization solver, available at: https://www.ibm.com/support/pages/downloading-ibm-ilog-cplex-optimization-studio-v1290
     
