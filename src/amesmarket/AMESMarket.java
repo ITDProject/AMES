@@ -29,8 +29,8 @@ import java.text.DecimalFormat;
 
 public class AMESMarket extends SimModelImpl {
 
-    public static final double VERSION = 5.0;
-    public static final String DATE = "1/1/2019";
+    public static final double VERSION = 5.1;
+    public static final String DATE = "1/1/2021";
 
     public static final int GRID_X_SIZE = 40;
     public static final int GRID_Y_SIZE = 40;
@@ -276,7 +276,7 @@ public class AMESMarket extends SimModelImpl {
 
     public void buildModel() {
 
-        System.out.println("\nAMES V5.0 models the ISO and each DAM/RTM market participant (LSE, GenCo) by means of a separate Java class.");
+        System.out.println("\nAMES V5.1 models the ISO and each DAM/RTM market participant (LSE, GenCo) by means of a separate Java class.");
         Date sysDate = new Date();
         System.out.println("\nSimulation Start time: " + sysDate.toString() + "\n");
         //System.out.println("Print the user-specified random seed: " + RANDOM_SEED + "\n");
@@ -622,7 +622,7 @@ public class AMESMarket extends SimModelImpl {
 
             public void execute() {
                 DecimalFormat LMPFormat = new DecimalFormat("###.##");
-                DecimalFormat MWFormat = new DecimalFormat("###.####");
+                DecimalFormat MWFormat = new DecimalFormat("###.###");
                 int min_len = 60; // in sec
                 int hour_len = 60 * min_len; // in sec
                 int day_len = 24 * hour_len; //in sec
@@ -632,7 +632,7 @@ public class AMESMarket extends SimModelImpl {
                 interval = (hour - 1) * NIH + (int) min / M;
 
                 //System.out.println("\nMarket Operation for Day: " + day + " Hour: " + hour + " Interval: " + (interval));
-                System.out.println("\nDay: " + day + " Hour: " + hour + " Min: " + min + " Interval: " + (interval) + " Count: " + count);
+                System.out.println("\nDay: " + (day-1) + " Hour: " + hour + " Min: " + min + " Interval: " + (interval) + " Count: " + count);
 
                 if (FNCSActive) {
                     if (day == 1 && min % 60 ==0) {
@@ -782,7 +782,7 @@ public class AMESMarket extends SimModelImpl {
                             stopCode /= 2;
                         }
 
-                        System.out.println("\nThe current simulation run is concluded on Day " + day + "\n"); // + " in response to the activation of the following \nstopping rule:(" + stopStr + ")\n\n");
+                        System.out.println("\nThe current simulation run is concluded for " + day + " days\n"); // + " in response to the activation of the following \nstopping rule:(" + stopStr + ")\n\n");
 
                     }
                     if(day==1){       
@@ -796,16 +796,18 @@ public class AMESMarket extends SimModelImpl {
                             hour++;
                             min = 0;
                             if (hour == 25) {
-                                System.out.println("\nRTM LMP Outcomes:       \n");
-                                for (int h = 0; h < getNumHoursPerDay(); h++) {
-                                        System.out.print((h+1));
-                                    for (int n = 0; n < getNumNodes(); n++) {
-                                        //System.out.print("h:" + h + "n:"+n);
-                                        System.out.print( " " + LMPFormat.format(RTLMP[h][n]));
-                                        RTLMP[h][n] = 0;
-                                    }
-                                    System.out.println("");
-                                }
+//                                if (day > 1){
+//                                System.out.println("\nRTM LMP Outcomes:       \n");
+//                                for (int h = 0; h < getNumHoursPerDay(); h++) {
+//                                        System.out.print((h+1));
+//                                    for (int n = 0; n < getNumNodes(); n++) {
+//                                        //System.out.print("h:" + h + "n:"+n);
+//                                        System.out.print( " " + LMPFormat.format(RTLMP[h][n]));
+//                                        RTLMP[h][n] = 0;
+//                                    }
+//                                    System.out.println("");
+//                                }
+//                                }
                                 min = 0;
                                 hour = 1;
                                 day++;

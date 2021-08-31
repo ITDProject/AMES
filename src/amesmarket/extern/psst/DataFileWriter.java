@@ -239,7 +239,7 @@ public class DataFileWriter {
 
             }
         
-            DecimalFormat LoadFormat = new DecimalFormat("#####.####");            
+            DecimalFormat LoadFormat = new DecimalFormat("#####.###");            
             refBufferWriter.write("param: NetFixedLoadForecast :=\n");
 
             //System.out.println("LoadProfileLSE length: " + LoadProfileLSE[0].length);
@@ -545,7 +545,7 @@ public class DataFileWriter {
 
             }
             
-            DecimalFormat LoadFormat = new DecimalFormat("#####.####"); 
+            DecimalFormat LoadFormat = new DecimalFormat("#####.###"); 
             refBufferWriter.write("param: NetFixedLoadForecast :=\n");
 
             double[][] NetFixedLoadForecast = new double[numNodes][numTimeSteps];

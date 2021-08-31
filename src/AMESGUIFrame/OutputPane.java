@@ -35,7 +35,7 @@ public class OutputPane extends javax.swing.JPanel {
         
         
         System.out.println("<><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><><>\n");
-        System.out.println("                     Version 5.0 of the AMES Wholesale Power Market Test Bed (AMES) \n");
+        System.out.println("                     Version 5.1 of the AMES Wholesale Power Market Test Bed (AMES) \n");
         System.out.println("                             developed by S. Battula and L. Tesfatsion \n");
         System.out.println("            with support from PNNL (Tom McDermott, Mitch Pelton, Qiuhua Huang, and Sarmad Hanif) \n");
         System.out.println("                       released as open-source software under the BSD 3-Clause License  \n");

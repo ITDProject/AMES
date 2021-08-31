@@ -55,7 +55,6 @@ public class PSSTDAMOpt implements DAMOptimization {
      * Configuration for external coopr call.
      */
     private final PSSTConfig PSSTExt;
-    DecimalFormat Format = new DecimalFormat("###.####");
 
     public PSSTDAMOpt(ISO independentSystemOperator, AMESMarket model) {
         this.ames = model;
@@ -68,13 +67,13 @@ public class PSSTDAMOpt implements DAMOptimization {
         this.GenDAMCommitmentStatusNextDay = new int[this.numHours][this.numGenAgents];
         this.GenDAMCommitmentStatusPresentDay = new int[this.numHours][this.numGenAgents];
         //genSchedule=new int[numGenAgents][numHoursPerDay];
-        this.MarketDir = new File("DataFiles");
-        this.TempDir = new File("DataFiles/PyomoTempFiles");
+        this.MarketDir = new File("tempFiles");
+        this.TempDir = new File("tempFiles/PyomoTempFiles");
         this.MarketDir.mkdirs();
         this.TempDir.mkdirs();
-        this.DAUnitCommitmentsFile = new File("DataFiles/DAUnitCommitments.dat");
-        this.DAMReferenceModelFile = new File("DataFiles/DAMReferenceModel.dat");
-        this.DAMResultsFile = new File("DataFiles/DAMResults.dat");
+        this.DAUnitCommitmentsFile = new File("tempFiles/DAUnitCommitments.dat");
+        this.DAMReferenceModelFile = new File("tempFiles/DAMReferenceModel.dat");
+        this.DAMResultsFile = new File("tempFiles/DAMResults.dat");
 
         this.PSSTExt = PSSTConfig.createDeterministicPSST("scuc", this.DAUnitCommitmentsFile, this.DAMReferenceModelFile, this.DAMResultsFile, this.ames.getTestCaseConfig().Solver);
 
@@ -236,7 +235,7 @@ public class PSSTDAMOpt implements DAMOptimization {
 
     public void syscall(PSSTConfig runefConfig) throws IOException {
 
-        System.out.println(" AMES V5.0 SCUC and SCED operations are performed using an external call to a Modified version of PSST. ");
+        System.out.println(" AMES V5.1 SCUC and SCED operations are performed using an external call to a Modified version of PSST. ");
 
         System.out.println(" PSST (Power System Simulation Toolbox) is a Python-based wrapper developed by Dheepak Krishnamurthy.  ");
 

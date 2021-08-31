@@ -60,7 +60,7 @@ public class DAMarket {
     private String SolutionStatus;
     
     private final PSSTDAMOpt scuc;
-    private final File DAMReferenceModelFile = new File("DataFiles/DAMReferenceModel.dat");
+    private final File DAMReferenceModelFile = new File("tempFiles/DAMReferenceModel.dat");
 
     private static final int PRICE_PARAM_LEN = 5;
     private static final int GEN_OFFER_PARAM_LEN = 6;
@@ -95,7 +95,7 @@ public class DAMarket {
 
     public void DAMCollectBidsAndOffers(int h, int d, boolean FNCSActive) {
         
-        System.out.println("\nCollecting Bids and Offers at Hour " + h + " of Day "+ d + " for Day " + (d+1) + " DAM operation \n");
+        System.out.println("\nCollecting Bids and Offers at Hour " + h + " of Day "+ (d-1) + " for Day " + d + " DAM operation \n");
 
         for (int i = 0; i < numGenAgents; i++) {
             GenAgent gen = (GenAgent) genAgentList.get(i);
@@ -122,7 +122,7 @@ public class DAMarket {
             strTemp += String.format("\t%1$15s", lseName);
         }
         
-        System.out.println("Gen Check:");
+        //System.out.println("Gen Check:");
         //--------------------------------------------------------------------//
         if (d > 1) {
             if (FNCSActive) {
@@ -143,7 +143,7 @@ public class DAMarket {
         }
         //--------------------------------------------------------------------//  
 
-        System.out.println("numNDGenAgents:"+numNDGenAgents);
+        //System.out.println("numNDGenAgents:"+numNDGenAgents);
         for (int j = 0; j < numNDGenAgents; j++) {
 
             NDGenAgent ndg = (NDGenAgent) NDGenAgentList.get(j);

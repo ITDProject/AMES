@@ -117,7 +117,7 @@ public class ISO {
         }
         
         if (day > 1 && (m % this.ames.M == 0) && count==5) {
-            System.out.println("\n\nRTM Optimization executing on Day " + day + " at Hour " + h + "- Interval " + (interval+1));
+            System.out.println("\n\nRTM Optimization executing on Day " + (day-1) + " at Hour " + h + "- Interval " + (interval+1));
             
             this.rtm.RTMarketOptimization(this.genRTCommitmentVector,
                     sumrealtimeload, sumrealtimeNDG, RTPSLdemandBidByLSE, m, interval, h, day);
@@ -148,7 +148,7 @@ public class ISO {
         }
 
         if (h == 10 && m == 0 && count==1) {
-            System.out.println("\n\nDAM Optimization for Day " + (day +1)+ " is executing at Hour: " + h + " of Day "+ day + "\n");
+            System.out.println("\n\nDAM Optimization for Day " + (day)+ " is executing at Hour: " + h + " of Day "+ (day-1) + "\n");
 
             this.dam.DAMarketOptimization(day, loadProfileByLSE, GenProfileByNDG, PSLdemandBidByLSE, supplyOfferByGen);
             SolutionStatus = this.dam.getSolutionStatus();
@@ -324,7 +324,7 @@ public class ISO {
         //String[][] output = new String[a.length][];
         //int i = 0;
         String output = "";
-        DecimalFormat LMPFormat = new DecimalFormat("###.####");
+        DecimalFormat LMPFormat = new DecimalFormat("###.##");
         for (int i = 0; i < a.length; i++) {
             //System.out.print( a[i][index]);
             String temp1 = LMPFormat.format(a[i][index]);

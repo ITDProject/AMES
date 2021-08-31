@@ -2426,7 +2426,7 @@ public class AMESFrame extends JFrame {
                     //case SCUC.SCUC_DETERM : outputFileName=caseFileName+df.format(new Date())+ "Deterministic" + ".out"; }
                     outputFileName = caseFileName + ".out";
                 }
-                File outdir = new File(this.caseFile.getParent(), "Output");
+                File outdir = new File(this.caseFile.getParent(), "outputFiles");
                 outdir.mkdir();
                 File outputFile = new File(outdir, outputFileName);
 

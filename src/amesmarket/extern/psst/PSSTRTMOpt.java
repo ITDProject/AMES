@@ -25,7 +25,7 @@ import java.text.DecimalFormat;
  */
 public class PSSTRTMOpt implements RTMOptimization {
 
-    private final File MarketDir = new File("DataFiles");
+    private final File MarketDir = new File("tempFiles");
     private final File RTUnitCommitmentsFile;
     private final File RTMReferenceModelFile;
     private final File RTMResultsFile;

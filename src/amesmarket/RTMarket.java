@@ -63,9 +63,9 @@ public class RTMarket {
     
     private static final int PRICE_PARAM_LEN = 5;
 
-    private final File RTUnitCommitmentsFile = new File("DataFiles/RTUnitCommitments.dat");
-    private final File RTMReferenceModelFile = new File("DataFiles/RTMReferenceModel.dat");// new File("SCUCresources/ScenarioData/RTRefernceModel.dat");
-    private final File RTMResultsFile = new File("DataFiles/RTMResults.dat");
+    private final File RTUnitCommitmentsFile = new File("tempFiles/RTUnitCommitments.dat");
+    private final File RTMReferenceModelFile = new File("tempFiles/RTMReferenceModel.dat");// new File("SCUCresources/ScenarioData/RTRefernceModel.dat");
+    private final File RTMResultsFile = new File("tempFiles/RTMResults.dat");
 
     // constructor
     public RTMarket(ISO iso, AMESMarket model) {
