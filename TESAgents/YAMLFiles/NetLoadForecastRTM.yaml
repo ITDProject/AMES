@@ -1,4 +1,0 @@
-name: NetLoadForecastRTM
-time_delta: 300s
-broker: tcp://localhost:5570
-values:
