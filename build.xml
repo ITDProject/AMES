@@ -7,9 +7,9 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="AMES-V5.0" default="default" basedir=".">
-    <description>Builds, tests, and runs the project AMES-V5.0.</description>
-    <import file="nbproject/build-impl.xml"/>
+<project name="AMES-V5.1" default="default" basedir=".">
+    <description>Builds, tests, and runs the project AMES-V5.1.</description>
+    <import file="nbProject/build-impl.xml"/>
     <!--
 
     There exist several targets which are by default empty and which can be 
@@ -41,7 +41,7 @@
         </target>
 
     For list of available properties check the imported 
-    nbproject/build-impl.xml file. 
+    nbProject/build-impl.xml file. 
 
 
     Another way to customize the build is by overriding existing main targets.
@@ -58,7 +58,7 @@
 
     An example of overriding the target for project execution could look like this:
 
-        <target name="run" depends="AMES-V5.0-impl.jar">
+        <target name="run" depends="AMES-V5.1-impl.jar">
             <exec dir="bin" executable="launcher.exe">
                 <arg file="${dist.jar}"/>
             </exec>
@@ -67,7 +67,7 @@
     Notice that the overridden target depends on the jar target and not only on 
     the compile target as the regular run target does. Again, for a list of available 
     properties which you can use, check the target you are overriding in the
-    nbproject/build-impl.xml file. 
+    nbProject/build-impl.xml file. 
 
     -->
 </project>
