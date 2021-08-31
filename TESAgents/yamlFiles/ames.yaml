@@ -1,0 +1,79 @@
+broker: tcp://localhost:5570
+name: ames
+time_delta: 1s
+values:
+  loadforecastDAM_LSE1_H1:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H1
+  loadforecastDAM_LSE1_H10:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H10
+  loadforecastDAM_LSE1_H11:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H11
+  loadforecastDAM_LSE1_H12:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H12
+  loadforecastDAM_LSE1_H13:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H13
+  loadforecastDAM_LSE1_H14:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H14
+  loadforecastDAM_LSE1_H15:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H15
+  loadforecastDAM_LSE1_H16:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H16
+  loadforecastDAM_LSE1_H17:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H17
+  loadforecastDAM_LSE1_H18:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H18
+  loadforecastDAM_LSE1_H19:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H19
+  loadforecastDAM_LSE1_H2:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H2
+  loadforecastDAM_LSE1_H20:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H20
+  loadforecastDAM_LSE1_H21:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H21
+  loadforecastDAM_LSE1_H22:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H22
+  loadforecastDAM_LSE1_H23:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H23
+  loadforecastDAM_LSE1_H24:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H24
+  loadforecastDAM_LSE1_H3:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H3
+  loadforecastDAM_LSE1_H4:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H4
+  loadforecastDAM_LSE1_H5:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H5
+  loadforecastDAM_LSE1_H6:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H6
+  loadforecastDAM_LSE1_H7:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H7
+  loadforecastDAM_LSE1_H8:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H8
+  loadforecastDAM_LSE1_H9:
+    default: 1
+    topic: NetLoadForecastDAM/loadforecastDAM_LSE1_H9
+  loadforecastRTM_LSE1:
+    default: 1
+    topic: NetLoadForecastRTM/loadforecastRTM_LSE1
