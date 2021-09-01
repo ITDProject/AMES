@@ -47,7 +47,7 @@ A brief summary of the version history follows:
 
 * Version 5.0 (May 2020) by Swathi Battula and Leigh Tesfatsion, with support from PNNL (Tom McDermott, Mitch Pelton, Qiuhua Huang, Sarmad Hanif). This version consolidates features from previous versions and continues the main development in PSST. It adds support for the submission of price-sensitive demand bids into daily DAM SCUC/SCED and RTM SCED optimizations formulated as MILP problems with a comprehensive set of system constraints.  It permits continual updating of initial state conditions to permit market operations to run over successive days.  The package includes an 8-bus test system based on data, operations, and market timing for the Electric Reliability Council of Texas (ERCOT).
 
-* The current version V5.1 differs from V5.0 mainly in handling the communication from TES agents through FNCS. The former handles the communication effectively compared to the later.
+* AMES V5.1 primarily differs from AMES V5.0 as follows:  The manner in which FNCS manages communications among TES agents is more efficiently implemented.
 
 More detail is provided in the `original release notes <http://www2.econ.iastate.edu/tesfatsi/AMESVersionReleaseHistory.htm>`_.  
 The original contributors to AMES have now spread out 
