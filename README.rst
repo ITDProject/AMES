@@ -23,7 +23,9 @@ The contents of AMES repository is organized in various folders as follows:
 
 * src: Java class files for AMES package are located here.
 * psst: Python files required for solving SCUC and SCED are located here.
-* nbproject: This is a NetBeans generated folder which is required to compile AMES using ANT tool.
+* nbproject: This is a NetBeans generated folder which is required to compile AMES using ANT tool. 
+  
+  (Note: Contents of nbproject are called in the 'build.xml' file which is required to compile AMES using ANT tool.) 
 * lib: All the required Java library files are located here.  
 * fncsDependencies: All the required files to run AMES with FNCS are located here. 
 * dist: Executable jar file for AMES is located here. 
