@@ -67,12 +67,10 @@ facilitate long-term viability and broader use of AMES, this repository
 has been created to consolidate the development efforts from different 
 organizations.  
 
-License and Disclaimer
+License
 ----------------------
 
 `<LICENSE.rst>`_
-
-`<DISCLAIMER.rst>`_
 
 .. _documentation:
 
