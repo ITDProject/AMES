@@ -19,7 +19,7 @@ The key features of AMES include:
 
 * Implementation in Python with CPLEX as the default solver, with an option to use any user-specified solver that is supported by Pyomo (Python-based open-source optimization modeling language). 
 
-The contents of the main branch of the AMES repository are organized into various folders, as follows:
+The contents this branch are organized into various folders, as follows:
 
 * src: This folder contains Java files for the AMES repository.
 * psst: This folder contains Python files required for solving the AMES SCUC and SCED optimizatons.
