@@ -2,13 +2,13 @@
 Agent-Based Modeling of Electricity Systems (AMES) - Version 5.0
 ================================================================
 
-Copyright (c) 2021, BSD 3-Clause License
+Copyright (c) 2020, Battelle Memorial Institute 
 
-Copyright (c) 2020, Battelle Memorial Institute
+License BSD 3-Clause
 
-Developers -- Swathi Battula and Leigh Tesfatsion at Iowa State University, with support from Pacific Northwest National Laboratory (PNNL) researchers Tom McDermott, Mitch Pelton, Qiuhua Huang, and Sarmad Hanif
+AMES V5.0 Developers -- Swathi Battula and Leigh Tesfatsion at Iowa State University, with support from Pacific Northwest National Laboratory (PNNL) researchers Tom McDermott, Mitch Pelton, Qiuhua Huang, and Sarmad Hanif
 
-Earlier AMES Versions: Developers credited for AMES V5.0 and earlier versions are listed in `<AUTHORS.rst>`_
+Earlier AMES Versions: Developers credited for earlier AMES versions are listed in `<AUTHORS.rst>`_
 
 Summary
 -------
@@ -30,7 +30,7 @@ The contents of the main branch of the AMES V5.0 repository are organized into v
 * lib: This folder contains all required Java library files for AMES V5.0.  
 * fncsDependencies: This folder contains all required files to run AMES V5.0 with FNCS. 
 * dist: This folder contains an executable JAR file for AMES V5.0. 
-* data: This folder contains input data files.
+* data: This folder contains input data files for AMES V5.0.
 * TESAgents: This folder contains: files for transactive agents; files required to establish communication with FNCS; and files required to compile and run AMES V5.0.
 
 See documentation_ and publications_ for more information.
