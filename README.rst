@@ -101,3 +101,6 @@ Publications
 - Auswin G. Thomas and Leigh Tesfatsion (2018), "Braided Cobwebs: Cautionary Tales for Dynamic Pricing in Retail Electric Power Markets" (`Preprint, pdf, 546KB <http://www2.econ.iastate.edu/tesfatsi/BraidedCobwebs.ThomasTesfatsion.PreprintIEEETPWRS.pdf>`_), IEEE Transactions on Power Systems, Volume 33, Issue 6, 6870-6882.
 - Steven Widergren, Junjie Sun, and Leigh Tesfatsion (2006), "Market Design Test Environments" (`pdf,136KB <http://www2.econ.iastate.edu/tesfatsi/MDTestEnvironment.2006IEEEPES.pdf>`_), Proceedings of the IEEE Power and Energy Society General Meeting, Montreal, June.
 
+Release(s)
+----------
+The released versions of the code can be found at https://github.com/ITDProject/AMES/releases.
