@@ -2,10 +2,6 @@
 Agent-Based Modeling of Electricity Systems (AMES) - Version 5.1
 ================================================================
 
-Copyright (c) 2020, Battelle Memorial Institute
-
-Copyright 2007 - present: numerous others credited in `<AUTHORS.rst>`_
-
 Summary
 -------
 
