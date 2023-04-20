@@ -2,6 +2,12 @@
 ============
 Installation
 ============
+==========================================================================================================================================================
+Note:
+ 1. The current version has been tested with Java JDK version 18.
+ 2. Starting from Python version 3.8, the support for the PATH directory, which was previously available by default directly in the extension modules for DLL dependencies loaded with ctypes on Windows, has been removed. For the current versions of AMES, users need to use Python version 3.7.
+==========================================================================================================================================================
+
 
 AMES V5.X is only supported on Windows Platform. 
 
@@ -66,6 +72,11 @@ AMES V5.X is only supported on Windows Platform.
 
         Note: For “version” command line prompts, Python requires the use of a double hyphen “- -version” whereas Ant requires the use of a single hyphen “-version”.  For Java, either option works.
 
+	Before installing PSST you need to install the following modules;
+			
+	"pip install numpy==1.22.3"  		; Newer versions do not support.
+	"pip install scipy"			; Newer versions work at present (April, 2023)
+	"pip install pyutilib"			; Newer versions work at present.(April, 2023)
 
 
 5. 	Install psst.
@@ -88,4 +99,7 @@ AMES V5.X is only supported on Windows Platform.
 6. 	Solver
 
     	AMES V5.X uses the CPLEX optimization solver, available at: https://www.ibm.com/support/pages/downloading-ibm-ilog-cplex-optimization-studio-v1290
-    
+	Make sure that CPLEX is configured to work with python by going to the root directory using command prompt where CPLEX has been installed and open the python folder for e.g. C:\'Program Files'\IBM\ILOG\CPLEX_Studio221\python
+	And enter the following command "python setup.py install"
+		
+	After the installation check on command prompt if CPLEX has been integrated by simply writing "CPLEX".
