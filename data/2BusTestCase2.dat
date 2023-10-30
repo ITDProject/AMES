@@ -1,0 +1,67 @@
+// FILENAME 2BusTestCase.dat
+
+// UNIT SI
+BASE_S 100
+BASE_V 10
+
+// Simulation Parameters
+FNCSActive true
+//StorageFlag 1
+MaxDay 3
+
+RTOPDur 60
+RTKDur 60
+
+BalPenPos 1000000
+BalPenNeg 1000000
+
+#ReservePercentStart
+	DARRD	DARRU	RTRRD	RTRRU
+	0.00		0.0		0.0		0.0
+#ReservePercentEnd
+
+PriceSensitiveDemandFlag 0
+
+// Bus Data
+NumberOfBuses       2
+
+//NumberOfReserveZones     2
+
+//#ZoneDataStart
+//  ZoneName    Buses    ZonalDARRD    ZonalDARRU	ZonalRTRRD	ZonalRTRRU
+//Zone1    1,3    0.1   0.1  0.01  0.01
+//Zone2    2    0.1   0.1  0.01  0.01
+//#ZoneDataEnd
+
+#LineDataStart
+//    Name	      From	        To	         MaxCap	      Reactance
+   Branch1	         1	         2	     500.0000	         0.1000
+#LineDataEnd
+
+#GenDataStart
+//    Name	   ID	      atBus	  SCost	    a	    b	         c	        NS	    PMin	        PMax	        InitMoney
+    GenCo1	   1	      1	     30.0000    100	    8.0000	    0.000	    1	    0.0000	    1000.000	    1000000.0000
+    GenCo2	   2	      2	     10.0000    100		10.0000	    0.000	    1	    0.0000	    1000.000	    1000000.0000
+#GenDataEnd
+
+#GenCostStart
+//  Name    ColdStartTime ColdStartUpCost    HotStartUpCost    ShutDownCost
+    GenCo1  3           0           0           0
+    GenCo2  3           0           0           0
+#GenCostEnd
+
+#ScucInputDataStart
+//  Name    PowerT0 UnitOnT0State    MinUpTime   MinDownTime NominalRampUp   NominalRampDown StartupRampLim ShutdownRampLim
+    GenCo1  0.0000	 		   -1         0          0         5000          5000             5000             5000
+    GenCo2  0.0000  		 	 -4       0          0         5000          5000            5000             5000
+#ScucInputDataEnd
+
+#LSEDataFixedDemandStart
+//    Name	        ID	     atBus	  	 H-00	      H-01	      H-02	     H-03	      H-04	      H-05	      H-06	     H-07
+      LSE1	         1	         2	     1200	      1300	      1100	     1301	      900	      801	      990	     801
+//    Name	        ID	     atBus	     H-08	      H-09	      H-10	      H-11	      H-12	      H-13	      H-14	     H-15
+      LSE1	         1	         2	     401	      401	      401	      401	      401	      401	      401	     401
+//    Name	        ID	     atBus	     H-16	      H-17	      H-18	      H-19	      H-20	      H-21	      H-22	     H-23
+      LSE1	         1	         2	     401	      401	      401	      401	      401	      401	      401	     800
+#LSEDataFixedDemandEnd
+
