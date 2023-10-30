@@ -60,7 +60,7 @@ public class SelectPanel extends javax.swing.JPanel {
         }
         else{
             dataTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Grid Branches", "GenCos", "LSE Fixed Demand"}));
-            outputDataTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "GenCo Commitments (Benchmark)", "GenCo Profits (Benchmark)","GenCo Net Earnings (Benchmark)", "LSE Price-Sensitive Demand (Benchmark)", "LSE Price-Sens. Net Earnings (Benchmark)", "LMPs (Benchmark)", "Total Supply&Demand (Benchmark)", "GenCo Reported Supply Offers", "GenCo Commitments", "GenCo Profits", "GenCo Net Earnings", "LSE Price-Sensitive Net Earnings", "Total Reported Supply & Demand", "LSE Price-Sensitive Demand", "Branch Power Flows", "LMPs","RealTimeLMPS" }));
+            outputDataTypeComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "GenCo Commitments (Benchmark)", "GenCo Profits (Benchmark)","GenCo Net Earnings (Benchmark)", "LSE Price-Sensitive Demand (Benchmark)", "LSE Price-Sens. Net Earnings (Benchmark)", "LMPs (Benchmark)", "Total Supply&Demand (Benchmark)", "GenCo Reported Supply Offers", "GenCo Commitments", "GenCo Profits", "GenCo Net Earnings", "LSE Price-Sensitive Net Earnings", "Total Reported Supply & Demand", "LSE Price-Sensitive Demand", "Branch Power Flows", "LMPs", "RealTimeLMPs"}));
 
          }
         
@@ -420,11 +420,14 @@ public class SelectPanel extends javax.swing.JPanel {
             }
              else  if(outputDataTypeSelect.equalsIgnoreCase("Branch Power Flows")) {
                 parentFrame.drawBranchPowerFlowData(outputTimeTypeSelect, iStartTime, iEndTime, iDayHour, selectIndex);
-            }
-            else  if(outputDataTypeSelect.equalsIgnoreCase("LMPs")) {
+            } 
+             else if (outputDataTypeSelect.equalsIgnoreCase("LMPs")) {
                 parentFrame.drawNodeLMPData(outputTimeTypeSelect, iStartTime, iEndTime, iDayHour, selectIndex);
+            } 
+             else if (outputDataTypeSelect.equalsIgnoreCase("RealTimeLMPs")) {
+                parentFrame.drawNodeRTLMPData(outputTimeTypeSelect, iStartTime, iEndTime, iDayHour, selectIndex);
             }
-     }
+        }
     }//GEN-LAST:event_outputDisplayButtonActionPerformed
 
     public String VerifyEndTime(){
@@ -573,6 +576,15 @@ public class SelectPanel extends javax.swing.JPanel {
             }
         }
         else if(outputDataTypeSelect.equalsIgnoreCase("LMPs")) {
+            maxTimeDisplay.setText("From Day 2 to Day "+String.valueOf(iMaxTime+1));
+             
+            String [] nodeName=amesFrame.getNodeNameData( );
+
+            for(int i=0; i<nodeName.length; i++) {
+                listModel.addElement(nodeName[i]);
+            }
+        }
+        else if(outputDataTypeSelect.equalsIgnoreCase("RealTimeLMPs")) {
             maxTimeDisplay.setText("From Day 2 to Day "+String.valueOf(iMaxTime+1));
              
             String [] nodeName=amesFrame.getNodeNameData( );

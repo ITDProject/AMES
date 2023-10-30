@@ -97,15 +97,23 @@ public class ISO {
             realtimeload = this.getRealTimeLoadForecast(h, FNCSActive); // fncs.get_events() is called to receive RT load forecast
             realtimeNDG = this.getRealTimeNDGForecast(h, FNCSActive); // fncs.get_events() is called to receive RT NDG forecast
             
+            //System.out.println("NIRTM: " + this.ames.NIRTM);
             for (int i= 0; i< J; i++){
                 for(int j=0; j< (int) this.ames.NIRTM; j++){
-                    sumrealtimeload[i][j] =  sumrealtimeload[i][j] + realtimeload[i][j];
+                    if(FNCSActive){
+                        //System.out.println("Hello: " + i + j);
+                        sumrealtimeload[i][j] =  sumrealtimeload[i][j] + realtimeload[i][j];
+                    }
+                    else
+                        sumrealtimeload[i][j] = realtimeload[i][j];
                 }
+                //System.out.println("sumRTLoad: " + sumrealtimeload[i][0]);   
             }
             
             for (int i= 0; i< J; i++){
                 for(int j=0; j< (int) this.ames.NIRTM; j++){
-                    sumrealtimeNDG[i][j] =  sumrealtimeNDG[i][j] + realtimeNDG[i][j];
+                    if (FNCSActive)
+                        sumrealtimeNDG[i][j] =  sumrealtimeNDG[i][j] + realtimeNDG[i][j];
                 }
             }
             
@@ -207,11 +215,15 @@ public class ISO {
                 }
             }
         } else {
+            //System.out.println("Real time load without fncs");
             for (int j = 0; j < J; j++) {
+                //System.out.print("LSE " + (j+1));
                 for (int k = 0; k < (ColSize); k++) {
                     //Hourly forecast is converted uniformly into per interval forecast
                     LoadProfileByLSE[j][k] = this.RTloadProfileforLSEs[j][h-1];
+                    //System.out.print(" " + LoadProfileByLSE[j][k]);
                 }
+                //System.out.println("");
             }
         }
         return LoadProfileByLSE;

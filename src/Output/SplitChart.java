@@ -45,6 +45,7 @@ import org.jfree.chart.labels.XYToolTipGenerator;
 import org.jfree.chart.labels.CustomXYToolTipGenerator;
 
 import AMESGUIFrame.*;
+import org.jfree.chart.axis.Axis;
 
 public class SplitChart  extends JFrame    {
     
@@ -57,7 +58,7 @@ public class SplitChart  extends JFrame    {
         //Create and set up the window.
         chartPanel = new ChartPanel(chart);
         int [] indexNull=new int[0];
-        drawGeneratorCommitmentWithTrueCostData("", 0, 0, 0, indexNull);
+        //drawGeneratorCommitmentWithTrueCostData("", 0, 0, 0, indexNull);
  
         SelectPanel selectPanel = new SelectPanel(amesFrame,false,null,this);
         
@@ -1949,7 +1950,7 @@ public void drawLSESurplusWithTrueCostData(String outputTimeTypeSelect, int iSta
       }
        
           // create the chart...
-        chart=ChartFactory.createXYLineChart(
+        chart=ChartFactory.createXYStepChart(
             chartTitle,      // chart title
             xLabel,                      // x axis label
             "Power (MWs)",                      // y axis label
@@ -1973,9 +1974,25 @@ public void drawLSESurplusWithTrueCostData(String outputTimeTypeSelect, int iSta
         renderer.setToolTipGenerator(generator);       
         
         plot.setRenderer(renderer);
-         
-        NumberAxis xAxis = (NumberAxis) plot.getDomainAxis();
-        xAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        ValueAxis xAxis = plot.getDomainAxis();
+//        xAxis.setAutoRange(true);
+        xAxis.setRange(0,50);
+        
+//        XYToolTipGenerator generator = new StandardXYToolTipGenerator("{2}", new DecimalFormat("0.00"), new DecimalFormat("0.00"));
+//        renderer.setToolTipGenerator(generator);
+        
+//        Axis domainAxis = plot.getDomainAxis();
+//         if (domainAxis instanceof NumberAxis) {
+//             NumberAxis numberAxis = (NumberAxis) domainAxis;
+//             numberAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+//         } else {
+//             System.out.println("inside else ");
+//         }
+//        ValueAxis xAxis = plot.getDomainAxis();
+//        xAxis.setStandardTickUnits();
+        
+        //NumberAxis xAxis = (NumberAxis) plot.getDomainAxis();
+        //xAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
         
         chart.getTitle().setFont(font);
         chartPanel.setChart(chart);
@@ -3008,7 +3025,294 @@ public void drawLSESurplusWithTrueCostData(String outputTimeTypeSelect, int iSta
         chartPanel.setChart(chart);
  }
 
-     public void setAMESFrame(AMESFrame frame) {
+   
+   public void drawNodeRTLMPData(String outputTimeTypeSelect, int iStartTime, int iEndTime, int iDayHour, int [] selectIndex) {
+      String [] names =  {
+                 "Bus Name", "Day Index", "   Hour",  "LMP ($/MWh)"
+           };
+      chartTitle="Real Time Locational Marginal Price";
+      String xLabel="";
+      
+      iStartTime=iStartTime-1;
+      iEndTime=iEndTime-1;
+      
+      ArrayList RTLMPByDay=amesFrame.getAMESMarket().getRealTimeLMPByInterval();
+                 
+      int[] hasSolutions;
+      
+      String [] nodeName=amesFrame.getNodeNameData( );
+      int iNodeNumber=nodeName.length;
+      
+      boolean draw3DChart=false;
+      dataset=new XYSeriesCollection();
+      DefaultCategoryDataset dataset3D=new DefaultCategoryDataset();
+      
+      if((selectIndex.length<1)||(selectIndex[0]==0)) {
+          if(outputTimeTypeSelect.equalsIgnoreCase("Entire Run (All Hours)")) {
+              int iDayNumber=RTLMPByDay.size();
+              xLabel="Hour";
+              
+              XYSeries noSolutionSeries = new XYSeries("No solution");
+              dataset.addSeries(noSolutionSeries);
+              boolean bNoSolution=false;
+              
+              double [][] lmp;
+              
+               for(int j=0; j<iNodeNumber; j++) {
+                 XYSeries series = new XYSeries(nodeName[j]);
+                 
+                  for(int iDay=0; iDay<iDayNumber; iDay++) {
+                        lmp=(double [][])RTLMPByDay.get(iDay);
+                     
+                        series.add(iDay+2, (double)(Math.round(lmp[iDayHour][j]*1000))/1000.0);
+                        
+                }
+
+                dataset.addSeries(series);
+              }
+              if(!bNoSolution)
+                dataset.removeSeries(noSolutionSeries);
+
+              chartTitle=chartTitle+"\n "+"for Entire Run (All Hours)";
+              //chartTitle=chartTitle+"\n "+"for Entire Run (At Hour "+ iDayHour+":00)";
+          }
+          else if(outputTimeTypeSelect.equalsIgnoreCase("Start to End Day (Selected Hour)")) {
+              xLabel="Day";
+              
+              XYSeries noSolutionSeries = new XYSeries("No solution");
+              dataset.addSeries(noSolutionSeries);
+              boolean bNoSolution=false;
+              
+              double [][] lmp;
+              
+               for(int j=0; j<iNodeNumber; j++) {
+                 XYSeries series = new XYSeries(nodeName[j]);
+                 
+                  for(int iDay=iStartTime-1; iDay<iEndTime; iDay++) {
+                        lmp=(double [][])RTLMPByDay.get(iDay);
+                     
+                        series.add(iDay+2, (double)(Math.round(lmp[iDayHour][j]*1000))/1000.0);
+                        
+                }
+
+                dataset.addSeries(series);
+              }
+              if(!bNoSolution)
+                dataset.removeSeries(noSolutionSeries);
+
+              chartTitle=chartTitle+"\n "+"From Day "+(iStartTime+1)+" to Day "+(iEndTime+1) +" (At Hour "+ iDayHour+":00)";
+          }
+          else if(outputTimeTypeSelect.equalsIgnoreCase("(All Hours)")) {
+              int iDayNumber=RTLMPByDay.size();
+              xLabel="Day";
+              
+              XYSeries noSolutionSeries = new XYSeries("No solution");
+              dataset.addSeries(noSolutionSeries);
+              boolean bNoSolution=false;
+              
+              double [][] lmp;
+              
+              for(int j=0; j<iNodeNumber; j++) {
+                 XYSeries series = new XYSeries(nodeName[j]);
+                 
+                  for(int iDay=0; iDay<iDayNumber; iDay++) {
+                    lmp=(double [][])RTLMPByDay.get(iDay);
+                     
+                     for(int i=0; i<24; i++) {
+                        series.add(iDay+1+i/24.0, (double)(Math.round(lmp[i][j]*1000))/1000.0);
+                        
+                      }
+                 }
+
+                 dataset.addSeries(series);
+             }
+             if(!bNoSolution)
+                dataset.removeSeries(noSolutionSeries);
+
+              chartTitle=chartTitle+"\n "+"for Entire Run (All Hours)";
+          }
+          else if(outputTimeTypeSelect.equalsIgnoreCase("Start to End Day (All Hours)")) {
+              xLabel="Day";
+             
+              XYSeries noSolutionSeries = new XYSeries("No solution");
+              dataset.addSeries(noSolutionSeries);
+              boolean bNoSolution=false;
+              
+              double [][] lmp;
+              
+              for(int j=0; j<iNodeNumber; j++) {
+                 XYSeries series = new XYSeries(nodeName[j]);
+                 
+                  for(int iDay=iStartTime-1; iDay<iEndTime; iDay++) {
+                    lmp=(double [][])RTLMPByDay.get(iDay);
+                     
+                     for(int i=0; i<24; i++) {
+                        series.add(iDay+1+i/24.0, (double)(Math.round(lmp[i][j]*1000))/1000.0);
+                        
+                      }
+                 }
+
+                 dataset.addSeries(series);
+             }
+             if(!bNoSolution)
+                dataset.removeSeries(noSolutionSeries);
+
+              chartTitle=chartTitle+"\n "+"From Day "+(iStartTime+1)+" to Day "+(iEndTime+1) +" (All Hours)";
+          }
+      }
+      else {
+          int iDataNumber=selectIndex.length;
+            
+              if(outputTimeTypeSelect.equalsIgnoreCase("Entire Run (Selected Hour)")) {
+                  int iDayNumber=RTLMPByDay.size();
+                  xLabel="Day";
+             
+                  XYSeries noSolutionSeries = new XYSeries("No solution");
+                  dataset.addSeries(noSolutionSeries);
+                  boolean bNoSolution=false;
+
+                  double [][] lmp;
+
+                  for(int j=0; j<iDataNumber; j++) {
+                       XYSeries series = new XYSeries(nodeName[selectIndex[j]-1]);
+
+                      for(int iDay=0; iDay<iDayNumber; iDay++) {
+                          lmp=(double [][])RTLMPByDay.get(iDay);
+
+                          series.add(iDay+2, (double)(Math.round(lmp[iDayHour][selectIndex[j]-1]*1000))/1000.0);
+
+                      }
+
+                  dataset.addSeries(series);
+                  }
+                 
+                  if(!bNoSolution)
+                    dataset.removeSeries(noSolutionSeries);
+
+                  chartTitle=chartTitle+"\n "+"for Entire Run (At Hour "+iDayHour+":00)";
+              }
+              else if(outputTimeTypeSelect.equalsIgnoreCase("Start to End Day (Selected Hour)")) {
+                  xLabel="Day";
+
+                  XYSeries noSolutionSeries = new XYSeries("No solution");
+                  dataset.addSeries(noSolutionSeries);
+                  boolean bNoSolution=false;
+
+                  double [][] lmp;
+
+                  for(int j=0; j<iDataNumber; j++) {
+                       XYSeries series = new XYSeries(nodeName[selectIndex[j]-1]);
+
+                      for(int iDay=iStartTime-1; iDay<iEndTime; iDay++) {
+                          lmp=(double [][])RTLMPByDay.get(iDay);
+
+                          series.add(iDay+2, (double)(Math.round(lmp[iDayHour][selectIndex[j]-1]*1000))/1000.0);
+
+                      }
+
+                  dataset.addSeries(series);
+                  }
+                 
+                  if(!bNoSolution)
+                    dataset.removeSeries(noSolutionSeries);
+
+                  chartTitle=chartTitle+"\n "+"From Day "+(iStartTime+1)+" to Day "+(iEndTime+1) +" (At Hour "+iDayHour+":00)";
+              }
+               else if(outputTimeTypeSelect.equalsIgnoreCase("Entire Run (All Hours)")) {
+                  int iDayNumber=RTLMPByDay.size();
+                  xLabel="Day";
+
+                  XYSeries noSolutionSeries = new XYSeries("No solution");
+                  dataset.addSeries(noSolutionSeries);
+                  boolean bNoSolution=false;
+
+                  double [][] lmp;
+
+                   for(int j=0; j<iDataNumber; j++) {
+                       XYSeries series = new XYSeries(nodeName[selectIndex[j]-1]);
+
+                      for(int iDay=0; iDay<iDayNumber; iDay++) {
+                          lmp=(double [][])RTLMPByDay.get(iDay);
+
+                         for(int i=0; i<24; i++) {
+                            series.add(iDay+1+i/24.0, (double)(Math.round(lmp[i][selectIndex[j]-1]*1000))/1000.0);
+                            
+                          }
+                     }
+
+                     dataset.addSeries(series);
+                   }
+                 
+                  if(!bNoSolution)
+                    dataset.removeSeries(noSolutionSeries);
+      
+                  chartTitle=chartTitle+"\n "+"for Entire Run (All Hours)";
+             }
+               else if(outputTimeTypeSelect.equalsIgnoreCase("Start to End Day (All Hours)")) {
+                  xLabel="Day";
+
+                  XYSeries noSolutionSeries = new XYSeries("No solution");
+                  dataset.addSeries(noSolutionSeries);
+                  boolean bNoSolution=false;
+
+                  double [][] lmp;
+
+                   for(int j=0; j<iDataNumber; j++) {
+                       XYSeries series = new XYSeries(nodeName[selectIndex[j]-1]);
+
+                      for(int iDay=iStartTime-1; iDay<iEndTime; iDay++) {
+                          lmp=(double [][])RTLMPByDay.get(iDay);
+
+                         for(int i=0; i<24; i++) {
+                            series.add(iDay+1+i/24.0, (double)(Math.round(lmp[i][selectIndex[j]-1]*1000))/1000.0);
+                            
+                          }
+                     }
+
+                     dataset.addSeries(series);
+                   }
+                 
+                  if(!bNoSolution)
+                    dataset.removeSeries(noSolutionSeries);
+      
+                  chartTitle=chartTitle+"\n "+"From Day "+(iStartTime+1)+" to Day "+(iEndTime+1) +" (All Hours)";
+             }
+          }
+      
+          // create the chart...
+        chart = ChartFactory.createXYLineChart(
+           chartTitle,      // chart title
+            xLabel,                      // x axis label
+            "Price ($/MWh)",                      // y axis label
+            dataset,                  // data
+            PlotOrientation.VERTICAL,
+            true,                     // include legend
+            true,                     // tooltips
+            false                     // urls
+        );
+
+        chart.setBackgroundPaint(Color.white);
+
+        // get a reference to the plot for further customisation...
+        final XYPlot plot=chart.getXYPlot();
+        plot.setBackgroundPaint(Color.white);
+        plot.setDomainGridlinePaint(Color.blue);
+        plot.setRangeGridlinePaint(Color.blue);
+
+        final XYLineAndShapeRenderer renderer=new XYLineAndShapeRenderer();
+        XYToolTipGenerator generator = new StandardXYToolTipGenerator("{2}", new DecimalFormat("0.00"), new DecimalFormat("0.00"));
+        renderer.setToolTipGenerator(generator);       
+        plot.setRenderer(renderer);
+         
+        NumberAxis xAxis = (NumberAxis) plot.getDomainAxis();
+        xAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        
+        chart.getTitle().setFont(font);
+        chartPanel.setChart(chart);
+ }
+
+    
+   public void setAMESFrame(AMESFrame frame) {
         amesFrame=frame;
     }
     
