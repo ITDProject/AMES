@@ -5,6 +5,8 @@ from functools import partial
 import click
 import logging
 
+
+
 from pyomo.environ import *
 
 logger = logging.getLogger(__file__)
@@ -12,7 +14,7 @@ logger = logging.getLogger(__file__)
 eps = 1e-3
 
 def fix_first_angle_rule(m,t, slack_bus=1):
-    return m.Angle[m.Buses[slack_bus], t] == 0.0
+    return m.Angle[m.Buses.at(slack_bus), t] == 0.0
 
 def lower_line_power_bounds_rule(m, l, t):
     if m.EnforceLine[l] and np.any(np.absolute(m.ThermalLimit[l]) > eps):
@@ -70,9 +72,11 @@ def power_balance(m, b, t):
 
 ##  This function defines m.NetPowerInjectionAtBus[b, t] constraint
 def net_power_at_bus_rule(m, b, t, PriceSenLoadFlag=False):
-    constraint = sum((1 - m.GeneratorForcedOutage[g,t]) * m.GeneratorBusContributionFactor[g, b] * m.PowerGenerated[g, t] for g in m.GeneratorsAtBus[b])
-
-    constraint = constraint - m.NetFixedLoad[b, t]
+    constraint = - m.NetFixedLoad[b, t]
+    # click.echo(f"line 75555 at time {t}")
+    if b in m.GeneratorsAtBus:
+        
+        constraint = constraint + sum((1 - m.GeneratorForcedOutage[g,t]) * m.GeneratorBusContributionFactor[g, b] * m.PowerGenerated[g, t] for g in m.GeneratorsAtBus[b])
 
     if PriceSenLoadFlag is True:
         constraint = constraint - sum(m.PSLoadDemand[l,t] for l in m.PriceSensitiveLoadsAtBus[b])
@@ -184,17 +188,20 @@ def enforce_ramping_rule_3(m, g, t):
                m.ScaledShutDownRampLimit[g]  * (m.UnitOn[g, t-1] - m.UnitOn[g, t]) + \
                m.MaximumPowerOutput[g] * (1 - m.UnitOn[g, t-1])
 
+
+
+
+
 def compute_hot_start_rule(m, g, t):
-    if (t+1) <= value(m.ScaledColdStartTime[g]):
-        if (t+1) - value(m.ScaledColdStartTime[g]) <= value(m.UnitOnT0State[g]):
+    if t <= value(m.ScaledColdStartTime[g]):    #akash : (t+1) changed to t 
+        if (t - value(m.ScaledColdStartTime[g])) <= value(m.UnitOnT0State[g]):  #akash : (t+1) changed to t 
             m.HotStart[g, t] = 1
             m.HotStart[g, t].fixed = True
             return Constraint.Skip
         else:
-            return m.HotStart[g, t] <= sum( m.UnitOn[g, i] for i in range(0, t) )
+            return m.HotStart[g, t] <= sum( m.UnitOn[g, i] for i in range(1, t) )         #range(0,t) has been changed to range(1,t), #akash
     else:
-        return m.HotStart[g, t] <= sum( m.UnitOn[g, i] for i in range(t - m.ScaledColdStartTime[g], t) )
-
+        return m.HotStart[g, t] <= sum( m.UnitOn[g, i] for i in   range(t - m.ScaledColdStartTime[g] , t))  #range(t - m.ScaledColdStartTime[g] , t) has been changed to range(t + 1 - m.ScaledColdStartTime[g] , t), #akash
 
 def compute_startup_costs_rule_minusM(m, g, t):
     if t == 1:
@@ -236,7 +243,7 @@ def enforce_up_time_constraints_subsequent(m, g, t):
 def enforce_down_time_constraints_initial(m, g):
    if value(m.InitialTimePeriodsOffLine[g]) == 0:
       return Constraint.Skip
-   return sum(m.UnitOn[g, t] for t in m.TimePeriods if (t+1) <= value(m.InitialTimePeriodsOffLine[g])) == 0.0
+   return sum(m.UnitOn[g, t] for t in m.TimePeriods if t <= value(m.InitialTimePeriodsOffLine[g])) == 0.0    #akash : (t+1) changed to t
 
 @simple_constraint_rule
 def enforce_down_time_constraints_subsequent(m, g, t):
@@ -279,6 +286,8 @@ def total_cost_objective_rule(m, PriceSenLoadFlag=False):
 def constraint_net_power(model, PriceSenLoadFlag=False):
     partial_net_power_at_bus_rule = partial(net_power_at_bus_rule, PriceSenLoadFlag=PriceSenLoadFlag)
     model.CalculateNetPowerAtBus = Constraint(model.Buses, model.TimePeriods, rule=partial_net_power_at_bus_rule)
+
+
 
 
 ################################################
@@ -324,6 +333,8 @@ def constraint_reserves(model, PriceSenLoadFlag=False,
         fn_enforce_reserve_down_requirements = partial(enforce_reserve_down_requirements_rule)
         model.EnforceReserveUpRequirements = Constraint(model.TimePeriods, rule=fn_enforce_reserve_up_requirements)
         model.EnforceReserveDownRequirements = Constraint(model.TimePeriods, rule=fn_enforce_reserve_down_requirements)
+        
+        
 
     if has_zonal_reserves is True:
         fn_enforce_zonal_reserve_down_requirement_rule = partial(enforce_zonal_reserve_down_requirement_rule,
@@ -366,8 +377,8 @@ def load_benefit_function(m, g, t, x):
 
 
 def constraint_for_cost(model):
-
-    model.ComputeProductionCosts = Piecewise(model.Generators * model.TimePeriods, model.ProductionCost, model.PowerGenerated, pw_pts=model.PowerGenerationPiecewisePoints, f_rule=production_cost_function, pw_constr_type='LB', warning_tol=1e-20)
+    
+    model.ComputeProductionCosts = Piecewise(model.Generators * model.TimePeriods, model.ProductionCost, model.PowerGenerated, pw_pts=model.PowerGenerationPiecewisePoints, f_rule=production_cost_function, pw_constr_type='LB', warning_tol=-1e-20)   #akash removed 
 
     model.ComputeHotStart = Constraint(model.Generators, model.TimePeriods, rule=compute_hot_start_rule)
     model.ComputeStartupCostsMinusM = Constraint(model.Generators, model.TimePeriods, rule=compute_startup_costs_rule_minusM)

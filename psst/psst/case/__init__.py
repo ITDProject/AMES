@@ -21,6 +21,9 @@ pd.options.display.max_columns = 999
 current_directory = os.path.realpath(os.path.dirname(__file__))
 
 
+
+# even if we don't write object it doesn't matter so don't worry about it just see #akash
+# that we have created a PSSTCase class that's it #akash
 class PSSTCase(object):
 
     name = Name()

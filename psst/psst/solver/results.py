@@ -10,23 +10,34 @@ class PSSTResults(object):
         self._model = model
         self._maximum_hours = 24
 
+
+    # @property
+    # def UnitOnT0(self):
+    #     m = self._model
+    #     return sum(m.UnitOnT0[g].value for g in m.Generators)
+    
+    @property
+    def total_objective(self):
+        m = self._model
+        return m.TotalCostObjective.value
+
     @property
     def production_cost(self):
         m = self._model
         st = 'SecondStage'
-        return sum([m.ProductionCost[g, t].value for t in m.GenerationTimeInStage[st] if t < self._maximum_hours for g in m.Generators])
+        return sum([m.ProductionCost[g, t].value for t in m.GenerationTimeInStage[st] if t <= self._maximum_hours for g in m.Generators])
 
     @property
     def commitment_cost(self):
         m = self._model
         st = 'FirstStage'
-        return sum([m.StartupCost[g, t].value + m.ShutdownCost[g, t].value for g in m.Generators for t in m.CommitmentTimeInStage[st] if t < self._maximum_hours])
+        return sum([m.StartupCost[g, t].value + m.ShutdownCost[g, t].value for g in m.Generators for t in m.CommitmentTimeInStage[st] if t <= self._maximum_hours])
 
     @property
     def noload_cost(self):
         m = self._model
         st = 'FirstStage'
-        return sum([sum([m.UnitOn[g, t].value for t in m.CommitmentTimeInStage[st] if t < self._maximum_hours]) * m.MinimumProductionCost[g].value * m.TimePeriodLength.value for g in m.Generators])
+        return sum([sum([m.UnitOn[g, t].value for t in m.CommitmentTimeInStage[st] if t <= self._maximum_hours]) * m.MinimumProductionCost[g].value * m.TimePeriodLength.value for g in m.Generators])
 
     @property
     def unit_commitment(self):

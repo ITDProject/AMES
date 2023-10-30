@@ -9,6 +9,7 @@ generator_data_str_format = '{bus}\t{Pg}\t{Qg}\t{Qmax}\t{Qmin}\t{Vg}\t{mBase}\t{
 
 current_directory = os.path.realpath(os.path.dirname(__file__))
 
+# current_directory = os.getcwd()  this method can also be used to get current_directory
 
 def int_else_float_except_string(s):
     try:
@@ -119,6 +120,7 @@ def read_model(model_data):
     with open(model_data) as f:
         data = f.read()
 
+    #click.echo("data : " + data)
     from .case import PSSTCase
     case = PSSTCase(os.path.join(current_directory, '../cases/case.m'))
 
@@ -217,15 +219,15 @@ def read_model(model_data):
             case.gen.loc[g, 'SCALED_MINIMUM_UP_TIME'] = int(scaled_min_up_time)
             case.gen.loc[g, 'SCALED_MINIMUM_DOWN_TIME'] = int(scaled_min_down_time)
             ramp_up = float(scaled_ramp_up_rate.replace(',', '.'))
-            case.gen.loc[g, 'SCALED_RAMP_UP'] = 999999 if ramp_up == 0 else ramp_up
+            case.gen.loc[g, 'SCALED_RAMP_UP'] = case.gen['PMAX'][g] if ramp_up == 0 else ramp_up
             # print('SCALED_RAMP_UP:',case.gen.loc[g, 'SCALED_RAMP_UP'])
             ramp_down = float(scaled_ramp_down_rate.replace(',', '.'))
-            case.gen.loc[g, 'SCALED_RAMP_DOWN'] = 999999 if ramp_down == 0 else ramp_down
+            case.gen.loc[g, 'SCALED_RAMP_DOWN'] = case.gen['PMAX'][g]if ramp_down == 0 else ramp_down
             # print('SCALED_RAMP_DOWN:',case.gen.loc[g, 'SCALED_RAMP_DOWN'])
             startup_ramp = float(scaled_startup_ramp_rate.replace(',', '.'))
-            case.gen.loc[g, 'SCALED_STARTUP_RAMP'] = 999999 if startup_ramp == 0 else startup_ramp
+            case.gen.loc[g, 'SCALED_STARTUP_RAMP'] = case.gen['PMAX'][g] if startup_ramp == 0 else startup_ramp
             shutdown_ramp = float(scaled_shutdown_ramp_rate.replace(',', '.'))
-            case.gen.loc[g, 'SCALED_SHUTDOWN_RAMP'] = 999999 if shutdown_ramp == 0 else shutdown_ramp
+            case.gen.loc[g, 'SCALED_SHUTDOWN_RAMP'] = case.gen['PMAX'][g] if shutdown_ramp == 0 else shutdown_ramp
             scaled_cold_start_time = int(scaled_cold_start_time.replace(',', '.'))
             case.gencost.loc[g, 'SCALED_COLD_START_TIME'] = scaled_cold_start_time
             cold_start_cost = float(coldstartcost.replace(',', '.'))
@@ -357,4 +359,38 @@ def read_model(model_data):
 
     ZonalDataComplete = {'zonalData': zonalData, 'zonalBusData': zonalBusData, 'ZonalDownReservePercent': ZonalDownReservePercent, 'ZonalUpReservePercent': ZonalUpReservePercent}
 
+
+
+# using the below commands we can get all the info about the case file 
+    # click.echo("case.gen : \n" + str(case.gen))
+    # click.echo("case.gen : \n" + str(case.gen.loc['']))
+    
+   
+    
+    # click.echo("case.gencost \n : " + str(case.gencost))
+    # click.echo("case.load : " + str(case.load.index.astype(object)))
+    # click.echo("case.branch  : \n" + str(case.branch))
+    # click.echo("case.bus : \n" + str(case.bus))
+    # click.echo("case.UpReservePercent : " + str(case.UpReservePercent))  
+    # click.echo("case.StorageFlag : " + str(case.StorageFlag))  
+    
+    
+    # click.echo("case.DownReservePercent : " + str(case.DownReservePercent)) 
+    # click.echo("case.TimePeriodLength : " + str(case.TimePeriodLength))
+    # click.echo("case.NumTimePeriods : " + str(case.NumTimePeriods))
+    # click.echo("case.NumTimePeriods : " + str(case.NumTimePeriods))
+    # click.echo("ZonalDataComplete : " + str(ZonalDataComplete))
+    # click.echo("priceSenLoadData : " + str(priceSenLoadData))
+    # click.echo("case.baseMVA : " + str(case.baseMVA))
+    # click.echo("case.positive_mismatch_penalty : " + str(case.PositiveMismatchPenalty)) #1e6
+    # click.echo("case.negative_mismatch_penalty : " + str(case.NegativeMismatchPenalty))  #1e6
+    # click.echo("case.gen_status : \n " + str(case.gen_status))
+    
+    # click.echo("----------------------------------------------------------------------")
+    
+    
+    
+    
+    
+    
     return case, ZonalDataComplete, priceSenLoadData  #, NDGData

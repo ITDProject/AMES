@@ -53,7 +53,7 @@ def initialize_model(model,
     model.StageCost = Var(model.StageSet, within=NonNegativeReals)
 
     # indicator variables for each generator, at each time period.
-    model.UnitOn = Var(model.Generators, model.TimePeriods, within=Binary, initialize=1)
+    model.UnitOn = Var(model.Generators, model.TimePeriods, within=Binary, initialize=0)
 
     # amount of power flowing along each line, at each time period
     model.LinePower = Var(model.TransmissionLines, model.TimePeriods, initialize=0)
@@ -95,7 +95,7 @@ def initialize_model(model,
     model.ShutdownCost = Var(model.Generators, model.TimePeriods, within=NonNegativeReals)
 
     # (implicit) binary denoting whether starting up a generator will cost HotStartCost or ColdStartCost
-    model.HotStart = Var(model.Generators, model.TimePeriods, bounds=(0,1))
+    model.HotStart = Var(model.Generators, model.TimePeriods, bounds=(0,1), initialize = 0)
 
     #################
     # Load Mismatch #

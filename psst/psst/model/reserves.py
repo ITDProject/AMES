@@ -36,9 +36,9 @@ def _form_generator_reserve_zones(m,rz):
 
 
 def _reserve_up_requirement_rule(m, t):
-    return m.UpReservePercent * sum(value(m.NetFixedLoad[b,t]) for b in m.Buses)
+    return m.UpReservePercent * sum(value(m.NetFixedLoad[b,t]) for b in m.Buses) 
 def _reserve_down_requirement_rule(m, t):
-    return m.DownReservePercent * sum(value(m.NetFixedLoad[b,t]) for b in m.Buses)
+    return m.DownReservePercent * sum(value(m.NetFixedLoad[b,t]) for b in m.Buses) 
 
 def initialize_global_reserves(model, DownReservePercent=None, UpReservePercent=None, reserve_up_requirement=_reserve_up_requirement_rule, reserve_down_requirement=_reserve_down_requirement_rule):
 
@@ -46,7 +46,8 @@ def initialize_global_reserves(model, DownReservePercent=None, UpReservePercent=
     model.UpReservePercent = Param(within=Reals, initialize=UpReservePercent, mutable=True)
     model.ReserveUpRequirement = Param(model.TimePeriods, initialize=reserve_up_requirement, within=NonNegativeReals, default=0.0, mutable=True)
     model.ReserveDownRequirement = Param(model.TimePeriods, initialize=reserve_down_requirement, within=NonNegativeReals, default=0.0, mutable=True)
-
+    # assign the up down reserve requirement hourly basis 
+    
 def initialize_zonal_reserves(model, PriceSenLoadFlag=False, zone_names=None, buses_at_each_zone=None, ZonalDownReservePercent=None, ZonalUpReservePercent=None, price_sen_load_reserve_zones =_build_price_sen_load_buses_at_each_zone, generator_reserve_zones=_form_generator_reserve_zones, zone_generator_map=_zone_generator_map):
 
     model.ReserveZones = Set(initialize=zone_names)

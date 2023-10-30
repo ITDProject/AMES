@@ -7,8 +7,8 @@ def initialize_network(model,
 
     model.TransmissionLines = Set(initialize=transmission_lines)
 
-    model.BusFrom = Param(model.TransmissionLines, initialize=bus_from)
-    model.BusTo = Param(model.TransmissionLines, initialize=bus_to)
+    model.BusFrom = Param(model.TransmissionLines, initialize=bus_from, within = Any)
+    model.BusTo = Param(model.TransmissionLines, initialize=bus_to, within = Any)
 
 # Alternative to lines_to
 def _derive_connections_to(m, b):

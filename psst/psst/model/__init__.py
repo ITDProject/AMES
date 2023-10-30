@@ -54,8 +54,10 @@ def build_model(case,
                 base_KV=1,
                 config=None):
 
+# we are passing only case, ZonalDataComplete, PriceSenLoadData and Op = 'scuc' when we are calling this function in cli.py
+
     if base_MVA is None:
-        base_MVA = case.baseMVA
+        base_MVA = case.baseMVA     #this will get executed so base_MVA = 100.0
 
     # Configuration
     if config is None:
@@ -67,16 +69,20 @@ def build_model(case,
     ZonalDownReservePercent = ZonalDataComplete['ZonalDownReservePercent']
 
     # Get configuration parameters from dictionary
-    use_ptdf = config.pop('use_ptdf', False)
+    use_ptdf = config.pop('use_ptdf', False)    #use_ptdf = False as config is an empty dictionary
 
     generator_df = generator_df or pd.merge(case.gen, case.gencost, left_index=True, right_index=True)
+    #this will merge the case.gen and case.gencost having same index 
+    
     load_df = load_df or case.load
     branch_df = branch_df or case.branch
     bus_df = bus_df or case.bus
-    DownReservePercent = case.DownReservePercent
-    UpReservePercent = case.UpReservePercent
+    DownReservePercent = case.DownReservePercent  #0
+    UpReservePercent = case.UpReservePercent      #0
+    
 
 
+# converting there datatype to object 
     branch_df.index = branch_df.index.astype(object)
     generator_df.index = generator_df.index.astype(object)
     bus_df.index = bus_df.index.astype(object)
@@ -89,10 +95,24 @@ def build_model(case,
 
     # Build model information
 
-    model = create_model()
+    model = create_model()     #creating a concrete Model    model = ConcreteModel()
 
-    initialize_buses(model, bus_names=bus_df.index)
+    
+    
+    initialize_buses(model, bus_names=bus_df.index)         #model.buses = Set(iniitialize = ['Bus1','Bus2'])
+    
+    
     initialize_time_periods(model, time_periods=list(load_df.index), time_period_length=case.TimePeriodLength)
+    # click.echo("Time Periods : " + str(load_df.index.astype(object)))
+    # model.TimePeriods = Set(initialize = [1,2,3,4,....,24])
+    # model.NumTimePeriods = Param(initialize = 24)
+    # model.TimePeriodLength = Param(initialize = 1)
+    
+    
+    
+    # click.echo("load dfffffffffffffffffffffff")
+    # click.echo(load_df)
+
 
     # Build network data
     initialize_network(model, transmission_lines=list(branch_df.index), bus_from=branch_df['F_BUS'].to_dict(), bus_to=branch_df['T_BUS'].to_dict())
@@ -114,17 +134,25 @@ def build_model(case,
 
     for i, g in generator_df.iterrows():
         generator_at_bus[g['GEN_BUS']].append(i)
+    
+    
 
     initialize_generators(model,
                         generator_names=generator_df.index,
                         generator_at_bus=generator_at_bus)
 
+    
     maximum_minimum_power_output_generators(model,
                                         minimum_power_output=generator_df['PMIN'].to_dict(),
                                         maximum_power_output=generator_df['PMAX'].to_dict())
 
+    
+    # gen_atBus(model, atBus={b: list() for b in generator_df['GEN_BUS'].unique()})  #akash
     # print('SCALED_RAMP_UP: ', str(generator_df['SCALED_RAMP_UP'].to_dict()))
     # print('SCALED_RAMP_DOWN: ', str(generator_df['SCALED_RAMP_DOWN'].to_dict()))
+    
+    # maximum_reserve_limits(model, r_limits={'GenCo1':0, 'GenCo2':1.6, 'GenCo3':1.9, 'GenCo4':0})            #akash
+    
     ramp_up_ramp_down_limits(model, scaled_ramp_up_limits=generator_df['SCALED_RAMP_UP'].to_dict(), scaled_ramp_down_limits=generator_df['SCALED_RAMP_DOWN'].to_dict())
 
     start_up_shut_down_ramp_limits(model, scaled_start_up_ramp_limits=generator_df['SCALED_STARTUP_RAMP'].to_dict(), scaled_shut_down_ramp_limits=generator_df['SCALED_SHUTDOWN_RAMP'].to_dict())
@@ -134,6 +162,8 @@ def build_model(case,
     forced_outage(model)
 
     generator_bus_contribution_factor(model)
+    
+    # maximum_reserve_limits(model, r_limits={'GenCo1':200, 'GenCo2': 150})  #akash
 
     
     if previous_unit_commitment_df is None:
@@ -164,9 +194,16 @@ def build_model(case,
     initial_power_generated_dict = generator_df['PG'].to_dict()
     initial_time_periods_online_dict = generator_df['InitialTimeON'].to_dict()
     initial_time_periods_offline_dict = generator_df['InitialTimeOFF'].to_dict()
+    
+    
+    # click.echo("--------------------------------aaaaaaaaaaaaaaaaaaaaa--------------------------------------------") 
+    # click.echo(initial_state_dict)
+    # click.echo(initial_time_periods_online_dict) 
+    # click.echo(initial_time_periods_offline_dict) 
 
     initial_state(model, initial_state=initial_state_dict, initial_power_generated=initial_power_generated_dict, initial_time_periods_online=initial_time_periods_online_dict, initial_time_periods_offline=initial_time_periods_offline_dict)
 
+    # click.echo('UnitOnT0:????' )
     # setup production cost for generators
 
     points = dict()
@@ -181,11 +218,22 @@ def build_model(case,
     for k, v in values.items():
         values[k] = [float(i) for i in v]
 
+    # click.echo("----------------------------------------------------------------")
+    # click.echo(points)
+    # click.echo(values)
+    # click.echo("----------------------------------------------------------------")
+    
     piece_wise_linear_cost(model, points, values)
+    # we have taken points based on no of segments and then 
+    # calculated the values at those points for both the generators 
 
     minimum_production_cost(model)
+    # value of cost and the first point corresponds to minimum production cost 
+    
     production_cost(model)
-
+    # cost we are getting after deducting the minimum production at each value 
+    
+    
     # setup start up and shut down costs for generators
 
     scaled_cold_start_time = case.gencost['SCALED_COLD_START_TIME'].to_dict()
@@ -202,11 +250,13 @@ def build_model(case,
         for col in columns:
             load_dict[(col, i)] = t[col]
 
+    
+  
     initialize_demand(model, NetFixedLoad=load_dict)
 
     # Initialize Pyomo Variables
     initialize_model(model,positive_mismatch_penalty=case.PositiveMismatchPenalty,negative_mismatch_penalty=case.NegativeMismatchPenalty)
-
+    # under initialize_model all the variables are declared 
     # price sensitive load
 
     if case.PriceSenLoadFlag == 0:
@@ -268,6 +318,9 @@ def build_model(case,
 
     initialize_global_reserves(model, DownReservePercent=DownReservePercent, UpReservePercent=UpReservePercent)
 
+    
+    
+    
     if zonalData['HasZonalReserves'] is True:
         initialize_zonal_reserves(model, PriceSenLoadFlag=PriceSenLoadFlag, zone_names=zonalData['Zones'], buses_at_each_zone=zonalBusData, ZonalDownReservePercent=ZonalDownReservePercent, ZonalUpReservePercent=ZonalUpReservePercent)
 
@@ -277,26 +330,52 @@ def build_model(case,
         bStorageFlag = True
 
     constraint_net_power(model, PriceSenLoadFlag=PriceSenLoadFlag)
+    # this constraint maintain new_power_injection = generation - load for all bus at all t 
 
+    # use_ptdf is false so else part is executed 
     if use_ptdf is True:
         ptdf = calculate_PTDF(case, precision=config.pop('ptdf_precision', None), tolerance=config.pop('ptdf_tolerance', None))
         constraint_line(model, ptdf=ptdf)
     else:
         constraint_line(model, slack_bus=bus_df.index.get_loc(bus_df[bus_df['TYPE'] == 3].index[0])+1)
+
+        # i. it maintains power flow in aline between Pmax and Pmin values of line 
+        # ii. fix the slack bus ('TYPE = 3') which in our case is Bus1 to 0
+        # iii. maintains line flow constraints i.e. P12 = (theta1 - theta2)/x12
+        
+        
         # Pyomo is 1-indexed for sets, and MATPOWER type of bus should be used to get the slack bus
+        # the above line means like say for example we have a set 
+        # model.buses = pyo.Set(initialize = ['Bus1', 'Bus2'])
+        # model.buses[0] -----> this will throw an error bcz in pyo set indexing start from 1
+        # model.buses[1] ====> Bus1
 
     constraint_power_balance(model)
+    # maintains power balance constraint at each bus for all t 
+    # generation load balance 
 
     constraint_total_demand(model, PriceSenLoadFlag=PriceSenLoadFlag)
+    # total_net_demand = sum(net_fixed_loads) at bus b for all t 
+    
     constraint_load_generation_mismatch(model)
+    # discuss it 
+    
     constraint_reserves(model, PriceSenLoadFlag=PriceSenLoadFlag, has_global_reserves=True, has_zonal_reserves=zonalData['HasZonalReserves'])
+    # maintains global and zonal reserve constraints 
+
     constraint_generator_power(model)
+    # two type of constraints are there --
+    # i. maintains generator power P[g,t] between min amd max limits at all t 
+    # ii. ramping constraints during startup, runnig and shutdown
+    
+    
+    
     if Op is 'scuc':
         constraint_up_down_time(model)
     constraint_for_cost(model)
 
     # Add objective function
-    objective_function(model, PriceSenLoadFlag=PriceSenLoadFlag)
+    objective_function(model, PriceSenLoadFlag=PriceSenLoadFlag)   #equation (10) of AMES 
 
     for t, row in case.gen_status.iterrows():
         for g, v in row.iteritems():
@@ -305,6 +384,7 @@ def build_model(case,
                 model.UnitOn[g, t] = int(float(v))
 
     model.dual = Suffix(direction=Suffix.IMPORT)
+    
 
     return PSSTModel(model)
 
@@ -337,3 +417,7 @@ class PSSTModel(object):
     @property
     def results(self):
         return self._results
+
+
+
+
