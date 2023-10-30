@@ -688,12 +688,19 @@ public class DataFileWriter {
 
         double DeltaK = DeltaT * 60; // DeltaK (min) = DeltaT (h) * 60 (min/h)
         // DAM SCUC : Units MW/min
-        ScaledRampUpLimit = (ga.getNominalRampUpLim() * DeltaK) / (baseS);
-        ScaledRampDownLimit = (ga.getNominalRampDownLim() * DeltaK) / (baseS);
-        ScaledStartUpRampLimit = (ga.getStartupRampLim() * DeltaK) / (baseS);
-        ScaledShutDownRampLimit = (ga.getShutdownRampLim() * DeltaK) / (baseS);
+        /*ScaledRampUpLimit = Math.min(ga.getCapacityMax(),(ga.getNominalRampUpLim() * DeltaK)) / (baseS);
+        ScaledRampDownLimit = Math.min(ga.getCapacityMax(),(ga.getNominalRampDownLim() * DeltaK)) / (baseS);
+        ScaledStartUpRampLimit = Math.min(ga.getCapacityMax(),(ga.getStartupRampLim() * DeltaK)) / (baseS);
+        ScaledShutDownRampLimit = Math.min(ga.getCapacityMax(),(ga.getShutdownRampLim() * DeltaK)) / (baseS);*/
+       
+        ScaledRampUpLimit = ((ga.getNominalRampUpLim()==0)? ga.getCapacityMax(): Math.min(ga.getCapacityMax(),(ga.getNominalRampUpLim() * DeltaK))) / (baseS);
+        ScaledRampDownLimit = ((ga.getNominalRampDownLim()==0)? ga.getCapacityMax():Math.min(ga.getCapacityMax(),(ga.getNominalRampDownLim() * DeltaK))) / (baseS);
+        ScaledStartUpRampLimit = ((ga.getStartupRampLim()==0)? ga.getCapacityMax():Math.min(ga.getCapacityMax(),(ga.getStartupRampLim() * DeltaK))) / (baseS);
+        ScaledShutDownRampLimit = ((ga.getShutdownRampLim() ==0)? ga.getCapacityMax():Math.min(ga.getCapacityMax(),(ga.getShutdownRampLim() * DeltaK))) / (baseS);
 
         ScaledMinUpTime = (int) Math.round(ga.getMinUpTime() / DeltaT);
+//        System.out.println("************************************************************");
+//        System.out.println(ScaledMinUpTime);
         ScaledMinDownTime = (int) Math.round(ga.getMinDownTime() / DeltaT);
         ScaledColdStartTime = (int) Math.round(ga.getColdStartUpTime() / DeltaT);
 
@@ -702,7 +709,7 @@ public class DataFileWriter {
         } else {
             InitialTimeON = 0;
         }
-
+        //System.out.println("InitialTimeON"+  InitialTimeON);
         if (UnitONT0State < 0) {
             InitialTimeOFF = Math.min(numTimeSteps, Math.max(0, (int) Math.round((ga.getMinDownTime() + UnitONT0State) / DeltaT)));
         } else {
